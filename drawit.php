@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt
- * @version 1.0.1
+ * @version 1.0.3
  */
 /*
 Plugin Name:    DrawIt
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams and images while editing a post. This plugin interfaces with the <a href="https://www.draw.io/">draw.io website</a> (not affiliated with this plugin).
-Version:        1.0.1
+Version:        1.0.3
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later

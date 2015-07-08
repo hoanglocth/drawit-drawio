@@ -3,7 +3,7 @@ Contributors: assortedchips
 Tags: diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical
 Requires at least: 4
 Tested up to: 4.2.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,9 @@ Please report all bugs and feature requests through the [Goolge+ DrawIt communit
 1. Selecting a diagam to edit from the WordPress text editor
 
 == Changelog ==
+
+= 1.0.3 =
+* Minor aesthetics
 
 = 1.0.2 =
 * Minor GUI changes when saving
