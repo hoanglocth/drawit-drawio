@@ -1,13 +1,13 @@
 === DrawIt ===
 Contributors: assortedchips
-Tags: drawit, diagram, flowchart, flow chart, draw, drawing, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit diagram
+Tags: drawit, diagram, flowchart, flow chart, draw, drawing, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit diagram, floorplan, floor plan, clipart, family tree, tree
 Requires at least: 4
 Tested up to: 4.2.2
 Stable tag: 1.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Draw and edit flow charts, diagrams and images while editing a post. Interfaces with the draw.io website (not affiliated with this plugin).
+Draw and edit flow charts, diagrams and images while editing a post.
 
 == Description ==
 
@@ -34,9 +34,17 @@ To edit a diagram that you've already created, just select it (e.g., the source 
 
 Please report all bugs and feature requests through the [Goolge+ DrawIt community](https://plus.google.com/communities/112051242587930767153).
 
+= Where is the source code for my diagram saved? =
+
+The source code for the diagram is saved with the image in your WordPress installation. As long as you do not delete the image from your media library, then you will be able to open and edit the image from the post/page editor where it is being used.
+
+= How do I edit a diagram that is only in the media library and not inserted into a post? =
+
+For now, you'll have to insert it into a post to be able to edit it. We'll work on improving this later.
+
 == Screenshots ==
 
-1. Creating/editing a diagram in the plugin via draw.io website
+1. Creating/editing a diagram in the plugin
 1. Many convenient ways to insert a new diagram
 1. Selecting a diagam to edit from the WordPress visual editor
 1. Selecting a diagam to edit from the WordPress text editor
