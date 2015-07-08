@@ -239,8 +239,7 @@ class drawit {
             $file_array = apply_filters('wp_handle_upload_prefilter', $file_array);
 
             // Add file to uploads directory, add to media library and attach to post.
-            $attach_id = media_handle_sideload($ftmp, $post_id);
-            //$attach_id = media_handle_sideload($file_array, $post_id);
+            $attach_id = media_handle_sideload($file_array, $post_id);
 
             // Get attachment URL and return the HTML to the post editor.
             if($attach_id) {
