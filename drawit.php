@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
 Plugin Name:    DrawIt
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams and images while editing a post. This plugin interfaces with the <a href="https://www.draw.io/">draw.io website</a> (not affiliated with this plugin).
-Version:        1.0.3
+Version:        1.0.4
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -239,7 +239,8 @@ class drawit {
             $file_array = apply_filters('wp_handle_upload_prefilter', $file_array);
 
             // Add file to uploads directory, add to media library and attach to post.
-            $attach_id = media_handle_sideload($file_array, $post_id);
+            $attach_id = media_handle_sideload($ftmp, $post_id);
+            //$attach_id = media_handle_sideload($file_array, $post_id);
 
             // Get attachment URL and return the HTML to the post editor.
             if($attach_id) {
@@ -271,9 +272,9 @@ class drawit {
 
                 } else {
                     if($ftmp_size !== false) {
-                    $resp['html'] = 'Sorry, could not insert attachment. true';
+                        $resp['html'] = 'Sorry, could not insert attachment into media library. WP error: ' . $attach_id->get_error_message();
                     } else {
-                    $resp['html'] = 'Sorry, could not insert attachment. false';
+                        $resp['html'] = 'Sorry, could not save temp file to filesystem. WP error: ' . $attach_id->get_error_message();
                     }
                 }
 

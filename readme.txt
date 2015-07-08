@@ -32,7 +32,7 @@ To edit a diagram that you've already created, just select it (e.g., the source 
 
 = How do I report a bug or feature request? =
 
-Please report all bugs and feature requests through the [Goolge+ DrawIt community](https://plus.google.com/communities/112051242587930767153).
+Please report all bugs and feature requests through the [DrawIt support page on WordPress](https://wordpress.org/support/plugin/drawit) or through the [Goolge+ DrawIt community](https://plus.google.com/communities/112051242587930767153).
 
 = Where is the source code for my diagram saved? =
 
@@ -50,6 +50,9 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 1. Selecting a diagam to edit from the WordPress text editor
 
 == Changelog ==
+
+= 1.0.4 =
+* Updated error messages to be more clear/useful
 
 = 1.0.3 =
 * Minor aesthetics
