@@ -3,7 +3,7 @@ Contributors: assortedchips
 Tags: drawit, diagram, flowchart, flow chart, draw, drawing, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit diagram, floorplan, floor plan, clipart, family tree, tree
 Requires at least: 4
 Tested up to: 4.2.2
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
