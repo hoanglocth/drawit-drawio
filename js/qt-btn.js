@@ -3,7 +3,7 @@
     plugin_name = 'DrawIt';
 
     // Add text-only button.
-    QTags.addButton(plugin_slug, plugin_name + ' diagram', function(el, canvas) {
+    QTags.addButton(plugin_slug, plugin_name, function(el, canvas) {
         selected_code = "";
         diag_title = "";
         img_id = "";

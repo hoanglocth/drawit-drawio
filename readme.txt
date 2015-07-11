@@ -3,11 +3,11 @@ Contributors: assortedchips
 Tags: drawit, diagram, block diagram, flowchart, flow chart, draw, drawing, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit diagram, schematic, floorplan, floor plan, clipart, family tree, tree, mockup
 Requires at least: 4
 Tested up to: 4.2.2
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Draw and edit flow charts, diagrams and images while editing a post.
+Draw and edit flow charts, diagrams, images and more while editing a post.
 
 == Description ==
 
@@ -32,7 +32,7 @@ To edit a diagram that you've already created, just select it (e.g., the source 
 
 = How do I report a bug or feature request? =
 
-Please report all bugs and feature requests through the [DrawIt support page on WordPress](https://wordpress.org/support/plugin/drawit) or through the [Goolge+ DrawIt community](https://plus.google.com/communities/112051242587930767153).
+Please report all bugs and feature requests through the [DrawIt support page on WordPress](https://wordpress.org/support/plugin/drawit) or through the [Google+ DrawIt community](https://plus.google.com/communities/112051242587930767153).
 
 = Where is the source code for my diagram saved? =
 
@@ -50,6 +50,12 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 1. Selecting a diagam to edit from the WordPress text editor
 
 == Changelog ==
+
+= 1.0.5 =
+* Added Version and F.A.Q. sections to the settings page.
+* Shortened DrawIt button text in text editor to take up less space.
+* Updated the enqueuing of CSS and JS to use plugin version number so updated plugin won't use old cached CSS and JS.
+* Updated plugin name
 
 = 1.0.4 =
 * Updated error messages to be more clear/useful

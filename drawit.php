@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.4
+ * @version 1.0.5
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
-Description:    Draw and edit flow charts, diagrams and images while editing a post. This plugin interfaces with the <a href="https://www.draw.io/">draw.io website</a> (not affiliated with this plugin).
-Version:        1.0.4
+Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
+Version:        1.0.5
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -112,14 +112,15 @@ class drawit {
 
     // Enqueue the javascript.
     public function enqueue_scripts() {
+        $this->plugin_data = get_plugin_data(__FILE__);
         // Admin user, so don't use minified CSS.
         if(current_user_can('manage_options')) {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__));
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_data['Version']);
         } else {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__));
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_data['Version']);
         }
-        wp_enqueue_script($this->plugin_slug . '-iframe-js', plugins_url('js/' . $this->plugin_slug . '-iframe.js', __FILE__), array(), false, true);
-        //wp_enqueue_script($this->plugin_slug . '-js-embed', 'https://www.draw.io/embed.js?s=basic', array(), false, true);
+        wp_enqueue_script($this->plugin_slug . '-iframe-js', plugins_url('js/' . $this->plugin_slug . '-iframe.js', __FILE__), array(), $this->plugin_data['Version'], true);
+        //wp_enqueue_script($this->plugin_slug . '-js-embed', 'https://www.draw.io/embed.js?s=basic', array(), $this->plugin_data['Version'], true);
     }
 
     // Add draw.io tab to "Insert Media" page when editing a post or page.
@@ -139,12 +140,13 @@ class drawit {
     // This calls the iframe-maker and enqueues associated javascript for generating
     // iframe that will hold editor.
     public function media_menu_handler() {
+        $this->plugin_data = get_plugin_data(__FILE__);
         $errors = '';
         wp_enqueue_script($this->plugin_slug . '-js', plugins_url('js/' . $this->plugin_slug . '.js', __FILE__));
         if(current_user_can('manage_options')) {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__));
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_data['Version']);
         } else {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__));
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_data['Version']);
         }
         return wp_iframe(array($this, 'iframe'), $errors);
     }
@@ -393,7 +395,7 @@ class drawit {
     }
 
     public function admin_add_page() {
-        add_options_page($this->plugin_label . ' Options', $this->plugin_label, 'manage_options', $this->plugin_slug, array($this, 'options_page'));
+        add_options_page($this->plugin_label . ' (draw.io) Settings', $this->plugin_label . ' (draw.io)', 'manage_options', $this->plugin_slug, array($this, 'options_page'));
     }
 
     public function img_type_settings_section_text() {
@@ -501,15 +503,31 @@ class drawit {
     }
 
     public function options_page() {
+        $this->plugin_data = get_plugin_data(__FILE__);
     ?>
     <div>
-    <h2><?php echo $this->plugin_label; ?> Options</h2>
+    <h2><?php echo $this->plugin_label; ?> (draw.io) Settings</h2>
     <form action="options.php" method="post">
     <?php settings_fields($this->plugin_slug . '_options'); ?>
     <?php do_settings_sections($this->plugin_slug); ?>
      
-    <input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" />
+    <input name="Submit" type="submit" id="submit" class="button button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
     </form></div>
+    <br>
+    <hr>
+    <h2>Plugin Version</h2>
+    <p><?php echo $this->plugin_label . ' ' . $this->plugin_data['Version']; ?></p>
+    <br>
+    <hr>
+    <h2>Frequently Asked Questions (FAQ)</h2>
+    <h3>How do I edit a diagram?</h3>
+    <p>To edit a diagram that you've already created, just select it (e.g., the source code in the text post editor or the image itself in the visual post editor) and then click on the DrawIt button in the editor!</p>
+    <h3>How do I report a bug or feature request?</h3>
+    <p>Please report all bugs and feature requests through the <a href="https://wordpress.org/support/plugin/drawit" title="DrawIt support - WordPress">DrawIt support page on WordPress</a> or through the <a href="https://plus.google.com/communities/112051242587930767153" title="DrawIt - Google+">Google+ DrawIt community</a>.</p>
+    <h3>Where is the source code for my diagram saved?</h3>
+    <p>The source code for the diagram is saved with the image in your WordPress installation. As long as you do not delete the image from your media library, then you will be able to open and edit the image from the post/page editor where it is being used.</p>
+    <h3>How do I edit a diagram that is only in the media library and not inserted into a post?</h3>
+    <p>For now, you'll have to insert it into a post to be able to edit it. We'll work on improving this later.</p>
      
     <?php
     }
@@ -526,7 +544,8 @@ class drawit {
     }
 
     public function quicktags_add_button() {
-        wp_enqueue_script('quicktags_' . $this->plugin_slug, plugins_url('js/qt-btn.js', __FILE__), array('quicktags'));
+        $this->plugin_data = get_plugin_data(__FILE__);
+        wp_enqueue_script('quicktags_' . $this->plugin_slug, plugins_url('js/qt-btn.js', __FILE__), array('quicktags'), $this->plugin_data['Version']);
     }
 
 } // End class
