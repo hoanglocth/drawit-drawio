@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.5
+ * @version 1.0.6
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0.5
+Version:        1.0.6
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -507,6 +507,7 @@ class drawit {
     ?>
     <div>
     <h2><?php echo $this->plugin_label; ?> (draw.io) Settings</h2>
+    <hr>
     <form action="options.php" method="post">
     <?php settings_fields($this->plugin_slug . '_options'); ?>
     <?php do_settings_sections($this->plugin_slug); ?>
@@ -529,6 +530,7 @@ class drawit {
     <h3>How do I edit a diagram that is only in the media library and not inserted into a post?</h3>
     <p>For now, you'll have to insert it into a post to be able to edit it. We'll work on improving this later.</p>
      
+    <hr>
     <?php
     }
 
