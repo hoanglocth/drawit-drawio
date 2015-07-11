@@ -1,6 +1,6 @@
-=== DrawIt ===
+=== DrawIt (draw.io) ===
 Contributors: assortedchips
-Tags: drawit, diagram, block diagram, flowchart, flow chart, draw, drawing, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit diagram, schematic, floorplan, floor plan, clipart, family tree, tree, mockup
+Tags: drawit, diagram, block diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit, schematic, floor plan, clipart, family tree
 Requires at least: 4
 Tested up to: 4.2.2
 Stable tag: 1.0.5
