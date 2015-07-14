@@ -74,6 +74,7 @@ class drawit {
         $this->plugin_label = $plugin_label;
         $this->plugin_default_options = $plugin_default_options;
         $this->valid_units = $valid_units;
+        $this->plugin_version = "1.0.6";
 
         // Options saved to database are used throughout the functions here, so 
         // make a copy now so they are easily accessible later.
@@ -112,15 +113,14 @@ class drawit {
 
     // Enqueue the javascript.
     public function enqueue_scripts() {
-        $this->plugin_data = get_plugin_data(__FILE__);
         // Admin user, so don't use minified CSS.
         if(current_user_can('manage_options')) {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_data['Version']);
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_version);
         } else {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_data['Version']);
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_version);
         }
-        wp_enqueue_script($this->plugin_slug . '-iframe-js', plugins_url('js/' . $this->plugin_slug . '-iframe.js', __FILE__), array(), $this->plugin_data['Version'], true);
-        //wp_enqueue_script($this->plugin_slug . '-js-embed', 'https://www.draw.io/embed.js?s=basic', array(), $this->plugin_data['Version'], true);
+        wp_enqueue_script($this->plugin_slug . '-iframe-js', plugins_url('js/' . $this->plugin_slug . '-iframe.js', __FILE__), array(), $this->plugin_version, true);
+        //wp_enqueue_script($this->plugin_slug . '-js-embed', 'https://www.draw.io/embed.js?s=basic', array(), $this->plugin_version, true);
     }
 
     // Add draw.io tab to "Insert Media" page when editing a post or page.
@@ -140,13 +140,12 @@ class drawit {
     // This calls the iframe-maker and enqueues associated javascript for generating
     // iframe that will hold editor.
     public function media_menu_handler() {
-        $this->plugin_data = get_plugin_data(__FILE__);
         $errors = '';
         wp_enqueue_script($this->plugin_slug . '-js', plugins_url('js/' . $this->plugin_slug . '.js', __FILE__));
         if(current_user_can('manage_options')) {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_data['Version']);
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.css', __FILE__), array(), $this->plugin_version);
         } else {
-            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_data['Version']);
+            wp_enqueue_style($this->plugin_slug . '-css', plugins_url('css/' . $this->plugin_slug . '.min.css', __FILE__), array(), $this->plugin_version);
         }
         return wp_iframe(array($this, 'iframe'), $errors);
     }
@@ -503,7 +502,6 @@ class drawit {
     }
 
     public function options_page() {
-        $this->plugin_data = get_plugin_data(__FILE__);
     ?>
     <div>
     <h2><?php echo $this->plugin_label; ?> (draw.io) Settings</h2>
@@ -517,7 +515,7 @@ class drawit {
     <br>
     <hr>
     <h2>Plugin Version</h2>
-    <p><?php echo $this->plugin_label . ' ' . $this->plugin_data['Version']; ?></p>
+    <p><?php echo $this->plugin_label . ' ' . $this->plugin_version; ?></p>
     <br>
     <hr>
     <h2>Frequently Asked Questions (FAQ)</h2>
@@ -546,8 +544,7 @@ class drawit {
     }
 
     public function quicktags_add_button() {
-        $this->plugin_data = get_plugin_data(__FILE__);
-        wp_enqueue_script('quicktags_' . $this->plugin_slug, plugins_url('js/qt-btn.js', __FILE__), array('quicktags'), $this->plugin_data['Version']);
+        wp_enqueue_script('quicktags_' . $this->plugin_slug, plugins_url('js/qt-btn.js', __FILE__), array('quicktags'), $this->plugin_version);
     }
 
 } // End class

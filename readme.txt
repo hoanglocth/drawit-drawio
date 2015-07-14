@@ -4,7 +4,7 @@ Donate link: http://www.assortedchips.com/lunch.html
 Tags: drawit, diagram, block diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit, schematic, floor plan, clipart, family tree
 Requires at least: 4
 Tested up to: 4.2.2
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,7 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 == Changelog ==
 
 = 1.0.6 =
+* Removed references to get_plugin_data() before the function is available.
 
 = 1.0.5 =
 * Added Version and F.A.Q. sections to the settings page.
@@ -73,6 +74,9 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+Fixes fatal error with get_plugin_data() for some installations, please upgrade.
 
 = 1.0.5 =
 CSS and javascript links in header now include the plugin version as a GET variable to prevent old versions' cached copies of the CSS and javascript from being used.
