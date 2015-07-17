@@ -22,7 +22,8 @@
 
 .drawit-editor-iframe {
     width: 100%;
-    height: calc(98% - (1em + 10px));
+    height: 94%;
+    height: calc(100% - 45px);
 }
 
 .drawit-editor-mask {

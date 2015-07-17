@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.6
+ * @version 1.0.7
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0.6
+Version:        1.0.7
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -74,7 +74,7 @@ class drawit {
         $this->plugin_label = $plugin_label;
         $this->plugin_default_options = $plugin_default_options;
         $this->valid_units = $valid_units;
-        $this->plugin_version = "1.0.6";
+        $this->plugin_version = "1.0.7";
 
         // Options saved to database are used throughout the functions here, so 
         // make a copy now so they are easily accessible later.
@@ -184,12 +184,19 @@ class drawit {
         } else {
             $post_id = (int) $_POST['post_id'];
             $img_type = $_POST['img_type'];
-            $img_b64 = explode(',', $_POST['img_data']);
-            if(strpos($img_b64[0], 'image/svg') !== false) {
-                unset($img_b64[0]);
-                $img_data = stripslashes(implode($img_b64));
+            $img_b64 = $_POST['img_data'];
+            $comma_pos = strpos($img_b64, ',');
+            if($comma_pos === false) {
+                $img_data = stripslashes($img_b64);
             } else {
-                $img_data = base64_decode($img_b64[1]);
+                // SVG
+                if(strpos($img_b64, 'image/svg') !== false) {
+                    $img_data = stripslashes(substr($img_b64, $comma_pos + 1));
+
+                // PNG
+                } else {
+                    $img_data = base64_decode(substr($img_b64, $comma_pos + 1));
+                }
             }
 
             if(!isset($_POST['title']) || sanitize_file_name($_POST['title']) == "") {
@@ -509,6 +516,8 @@ class drawit {
     <form action="options.php" method="post">
     <?php settings_fields($this->plugin_slug . '_options'); ?>
     <?php do_settings_sections($this->plugin_slug); ?>
+
+    <p class="<?php echo $this->plugin-slug; ?>-warn-svg"><strong>WARNING:</strong> If you plan to use SVG images, you should be aware that you may have visual problems when viewed in ALL versions of Internet Explorer, which does not support the usage of the &quot;foreignObject&quot; tags that are used in these SVG images. These SVGs and the foreignObject tags are supported in pretty much any other modern browser, including Microsoft's new Edge browser.</p>
      
     <input name="Submit" type="submit" id="submit" class="button button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
     </form></div>
