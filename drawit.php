@@ -232,11 +232,11 @@ class drawit {
 
             // Write the XML to a temp file.
             $tmpfname = tempnam(sys_get_temp_dir(), "php");
-			if(strtolower($img_type) == 'svg') {
-				$ftmp = fopen($tmpfname, "w");
-			} else {
-				$ftmp = fopen($tmpfname, "wb");
-			}
+            if(strtolower($img_type) == 'svg') {
+                $ftmp = fopen($tmpfname, "w");
+            } else {
+                $ftmp = fopen($tmpfname, "wb");
+            }
             $ftmp_size = fwrite($ftmp, $img_data);
             $ftmp_meta = stream_get_meta_data($ftmp);
             $file_array = array(
@@ -246,7 +246,7 @@ class drawit {
                 'type' => $img_type,
                 'size' => $ftmp_size
             );
-			fclose($ftmp);
+            fclose($ftmp);
 
             // Check if any file renaming is needed (e.g., to avoid overwriting existing file).
             $file_array = apply_filters('wp_handle_upload_prefilter', $file_array);
@@ -259,11 +259,11 @@ class drawit {
                 if(!is_wp_error($attach_id)) {
                     // Update attachment metadata with plugin info.
                     $metadata = wp_get_attachment_metadata($attach_id);
-					if(is_array($metadata) && array_key_exists('image_meta', $metadata)) {
-						$image_meta = $metadata['image_meta'];
-					} else {
-						$image_meta = array();
-					}
+                    if(is_array($metadata) && array_key_exists('image_meta', $metadata)) {
+                        $image_meta = $metadata['image_meta'];
+                    } else {
+                        $image_meta = array();
+                    }
                     $image_meta['is_' . $this->plugin_slug] = true;
                     $image_meta[$this->plugin_slug . '_xml'] = $xml->asXML();
                     $image_meta['title'] = $title;
