@@ -4,7 +4,7 @@ Donate link: http://www.assortedchips.com/lunch.html
 Tags: drawit, diagram, block diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit, schematic, floor plan, clipart, family tree
 Requires at least: 4
 Tested up to: 4.2.2
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 
 == Changelog ==
 
+= 1.0.8 =
+* Fixed file saving problem for Windows or WAMPServer based installations.
+
 = 1.0.7 =
 * Fixed problem where saving SVGs sometimes would be malformed.
 * Reduced editor iframe height to get rid of needless scrollbar.
@@ -78,6 +81,9 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+* Fixed file saving problem for Windows or WAMPServer based installations.
 
 = 1.0.7 =
 Important fix for saving SVG format, please upgrade immediately if you use SVGs.
