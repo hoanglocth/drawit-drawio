@@ -3,7 +3,7 @@ Contributors: assortedchips
 Donate link: http://www.assortedchips.com/lunch.html
 Tags: drawit, diagram, block diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit, schematic, floor plan, clipart, family tree
 Requires at least: 4
-Tested up to: 4.2.2
+Tested up to: 4.2.3
 Stable tag: 1.0.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

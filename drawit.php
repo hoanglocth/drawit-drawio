@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.8
+ * @version 1.0.8-dbg
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0.8
+Version:        1.0.8-dbg
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -74,7 +74,7 @@ class drawit {
         $this->plugin_label = $plugin_label;
         $this->plugin_default_options = $plugin_default_options;
         $this->valid_units = $valid_units;
-        $this->plugin_version = "1.0.8";
+        $this->plugin_version = "1.0.8-dbg";
 
         // Options saved to database are used throughout the functions here, so 
         // make a copy now so they are easily accessible later.
@@ -231,7 +231,7 @@ class drawit {
             }
 
             // Write the XML to a temp file.
-            $tmpfname = tempnam(sys_get_temp_dir(), "php");
+            $tmpfname = tempnam(get_temp_dir(), "php");
             if(strtolower($img_type) == 'svg') {
                 $ftmp = fopen($tmpfname, "w");
             } else {
