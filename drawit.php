@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.8-dbg
+ * @version 1.0.9
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0.8-dbg
+Version:        1.0.9
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -74,7 +74,7 @@ class drawit {
         $this->plugin_label = $plugin_label;
         $this->plugin_default_options = $plugin_default_options;
         $this->valid_units = $valid_units;
-        $this->plugin_version = "1.0.8-dbg";
+        $this->plugin_version = "1.0.9";
 
         // Options saved to database are used throughout the functions here, so 
         // make a copy now so they are easily accessible later.
