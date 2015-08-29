@@ -17,8 +17,9 @@ jQuery(document).ready( function() {
         document.getElementById(plugin_slug + '-editor-mask').style.display = "block";
         document.getElementById(plugin_slug + '-xml').value = xml;
         img_msg = {
-            'action':   'export',
-            'format':   document.getElementById(plugin_slug + '-type').value
+            'action':       'export',
+            'embedImages':  true,
+            'format':       document.getElementById(plugin_slug + '-type').value
         };
         send_msg(img_msg);
     }
@@ -48,7 +49,15 @@ jQuery(document).ready( function() {
 
             // Fail.
             } else {
-                alert(resp['html']);
+                //alert(resp['html']);
+                img_msg = {
+                    'action':       'dialog',
+                    'title':        'Error',
+                    'message':      resp['html'],
+                    'button':       'OK',
+                    'modified':     true
+                };
+                send_msg(img_msg);
             }
 
             document.getElementById(plugin_slug + '-editor-mask').style.display = "none";

@@ -4,7 +4,7 @@ Donate link: http://www.assortedchips.com/lunch.html
 Tags: drawit, diagram, block diagram, flow chart, draw, hierarchy, visio, draw.io, chart, network, topology, genealogy, process map, electrical, uml, org chart, bpmn, sitemap, circuit, schematic, floor plan, clipart, family tree
 Requires at least: 4.0
 Tested up to: 4.3
-Stable tag: 1.0.9
+Stable tag: 1.0.14
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,20 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 
 == Changelog ==
 
+= 1.0.15 =
+* SVG saving update coinciding with draw.io server now encoding in base64.
+
+= 1.0.14 =
+* Workaround for server not responding with 'format' attribute ('no image type was specified' error).
+* Better error messages that do not use alert() popup (i.e., can copy/paste message).
+
+= 1.0.12 =
+* Fixed problem where version 1.0.10 broke for older versions of php.
+
+= 1.0.10 =
+* Update necessary to handle new draw.io SVG handling. Upgrade required or SVG saving will no longer work.
+* Added option for selecting temp directory.
+
 = 1.0.9 =
 * Fixed temp directory problem for Mac OS installations.
 
@@ -85,6 +99,18 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 
 == Upgrade Notice ==
 
+= 1.0.15 =
+SVG saving update coinciding with draw.io server now encoding in base64. Must update for SVG to continue working.
+
+= 1.0.14 =
+Workaround for server not responding with 'format' attribute ('no image type was specified' error).
+
+= 1.0.12 =
+Fixed problem where version 1.0.10 broke for older versions of php. Also - previous version has update necessary to handle new draw.io SVG handling. Upgrade required to 1.0.12 or SVG saving will no longer work.
+
+= 1.0.10 =
+Update necessary to handle new draw.io SVG handling. Upgrade required or SVG saving will no longer work.
+
 = 1.0.9 =
 Fixes temp file problem for Mac OS installations.
 
@@ -99,6 +125,9 @@ Fixes fatal error with get_plugin_data() for some installations, please upgrade.
 
 = 1.0.5 =
 CSS and javascript links in header now include the plugin version as a GET variable to prevent old versions' cached copies of the CSS and javascript from being used.
+
+== To-do List ==
+* Will add option for saving draw.io XML source in the PNG or SVG directly, instead of only saving the source XML to the WP database.
 
 == Notice ==
 

@@ -1,13 +1,13 @@
 <?php
 /**
  * @package DrawIt (draw.io)
- * @version 1.0.9
+ * @version 1.0.15
  */
 /*
 Plugin Name:    DrawIt (draw.io)
 Plugin URI:     http://www.assortedchips.com/#drawit
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0.9
+Version:        1.0.15
 Author:         assorted[chips]
 Author URI:     http://www.assortedchips.com/
 License:        GPL3 or later
@@ -43,7 +43,8 @@ $plugin_default_options = array(
     //'max_width'         => '100%',
     //'max_height'        => '9in',
     'default_type'      => 'png',
-    'allow_svg'         => 'no'
+    'allow_svg'         => 'no',
+    'temp_dir'          => 'wp_default'
 );
 $valid_types = array(
     'png',
@@ -66,19 +67,30 @@ $valid_units = array(
     'vmin',
     'vmax'
 );
+$valid_temp_dirs = array(
+    'wp_default',
+    'wp_content'
+);
 
 class drawit {
 
-    public function __construct($plugin_slug, $plugin_label, $plugin_default_options, $valid_types, $valid_units) {
+    public function __construct($plugin_slug, $plugin_label, $plugin_default_options, $valid_types, $valid_units, $valid_temp_dirs) {
         $this->plugin_slug = $plugin_slug;
         $this->plugin_label = $plugin_label;
         $this->plugin_default_options = $plugin_default_options;
         $this->valid_units = $valid_units;
-        $this->plugin_version = "1.0.9";
+        $this->valid_temp_dirs = $valid_temp_dirs;
+        $this->plugin_version = "1.0.15";
 
         // Options saved to database are used throughout the functions here, so 
         // make a copy now so they are easily accessible later.
         $this->options = get_option($this->plugin_slug . '_options', $this->plugin_default_options);
+
+        // Starting w/ version 1.0.10, need to check for new options that don't exist in database yet.
+        // v 1.0.10:
+        if(!array_key_exists('temp_dir', $this->options)) {
+            $this->options['temp_dir'] = $this->plugin_default_options['temp_dir'];
+        }
 
         // If the user has selected to not allow SVG uploads, then remove that 
         // from the "valid types".
@@ -158,15 +170,39 @@ class drawit {
         libxml_use_internal_errors(false);
         $specified_title = '';
 
+        $img_b64 = $_POST['img_data'];
+        $comma_pos = strpos($img_b64, ',');
+        $img_type = 'png';
+        if($comma_pos === false) {
+            $img_data = stripslashes($img_b64);
+        } else {
+            // SVG
+            if(strpos($img_b64, 'image/svg') !== false) {
+                if(strpos($img_b64, 'base64') < $comma_pos) {
+                    $img_data = urldecode(stripslashes(base64_decode(substr($img_b64, $comma_pos + 1))));
+                } else {
+                    $img_data = urldecode(stripslashes(substr($img_b64, $comma_pos + 1)));
+                }   
+                $img_type = 'svg';
+
+            // PNG
+            } else {
+                $img_data = base64_decode(substr($img_b64, $comma_pos + 1));
+            }
+        }
+
         // Make sure nonce matches.
         if(!isset($_POST['nonce']) || !check_ajax_referer('media-form_' . $this->plugin_slug, 'nonce')) {
             $resp['html'] = 'Sorry, your nonce did not verify.';
 
+        /*
         // Check other submitted values.
         } elseif(!isset($_POST['img_type']) || $_POST['img_type'] == "") {
             $resp['html'] = 'Sorry, no image type was specified.';
+         */
 
-        } elseif(strtolower($_POST['img_type']) == 'svg' && $this->options['allow_svg'] != 'yes') {
+        //} elseif(strtolower($_POST['img_type']) == 'svg' && $this->options['allow_svg'] != 'yes') {
+        } elseif(strtolower($img_type) == 'svg' && $this->options['allow_svg'] != 'yes') {
             $resp['html'] = 'Sorry, uploading SVG images has been disabled.';
 
         } elseif(!isset($_POST['img_data']) || $_POST['img_data'] == "") {
@@ -183,21 +219,7 @@ class drawit {
         // All is well.
         } else {
             $post_id = (int) $_POST['post_id'];
-            $img_type = $_POST['img_type'];
-            $img_b64 = $_POST['img_data'];
-            $comma_pos = strpos($img_b64, ',');
-            if($comma_pos === false) {
-                $img_data = stripslashes($img_b64);
-            } else {
-                // SVG
-                if(strpos($img_b64, 'image/svg') !== false) {
-                    $img_data = stripslashes(substr($img_b64, $comma_pos + 1));
-
-                // PNG
-                } else {
-                    $img_data = base64_decode(substr($img_b64, $comma_pos + 1));
-                }
-            }
+            //$img_type = $_POST['img_type'];
 
             if(!isset($_POST['title']) || sanitize_file_name($_POST['title']) == "") {
                 $title = $this->plugin_slug . '_diagram';
@@ -230,8 +252,25 @@ class drawit {
                 }
             }
 
+            // Check for temp directory location.
+            if($this->options['temp_dir'] == "wp_content") {
+                $tempdir_base = wp_upload_dir();
+                $tempdir = $tempdir_base['basedir'] . "/" . $this->plugin_slug . "_temp";
+
+                // Temp dir doesn't exist, create it.
+                if(!file_exists($tempdir)) {
+
+                    // Couldn't create directory, use default setting instead.
+                    if(!mkdir($tempdir)) {
+                        $tempdir = get_temp_dir();
+                    }
+                }
+            } else {
+                $tempdir = get_temp_dir();
+            }
+
             // Write the XML to a temp file.
-            $tmpfname = tempnam(get_temp_dir(), "php");
+            $tmpfname = tempnam($tempdir, "php");
             if(strtolower($img_type) == 'svg') {
                 $ftmp = fopen($tmpfname, "w");
             } else {
@@ -402,6 +441,9 @@ class drawit {
         add_settings_section($this->plugin_slug . '_img_type', 'Diagram Save-as Image Type', array($this, 'img_type_settings_section_text'), $this->plugin_slug);
         add_settings_field($this->plugin_slug . '_allow_svg', 'Allow uploading SVG', array($this, 'setting_allow_svg'), $this->plugin_slug, $this->plugin_slug . '_img_type');
         add_settings_field($this->plugin_slug . '_default_type', 'Default image type', array($this, 'setting_default_type'), $this->plugin_slug, $this->plugin_slug . '_img_type');
+
+        add_settings_section($this->plugin_slug . '_advanced', 'Advanced Options', array($this, 'advanced_settings_section_text'), $this->plugin_slug);
+        add_settings_field($this->plugin_slug . '_temp_dir', 'Default temporary directory', array($this, 'setting_temp_dir'), $this->plugin_slug, $this->plugin_slug . '_advanced');
         /*
         add_settings_section($this->plugin_slug . '_diagram_size', 'Diagram Size Settings', array($this, 'diagram_settings_section_text'), $this->plugin_slug);
         add_settings_field($this->plugin_slug . '_default_width', 'Default diagram iframe width', array($this, 'setting_default_width'), $this->plugin_slug, $this->plugin_slug . '_iframe_size');
@@ -417,6 +459,11 @@ class drawit {
 
     public function img_type_settings_section_text() {
         echo '<p>These settings specify if you would like to allow uploading of images in SVG format and the default image type to save as (either PNG or SVG). Note that whatever you choose for the default selection can be overridden per-diagram when saving a diagram.</p>';
+        echo '<p class="' . $this->plugin_slug . '-warn-svg"><strong>WARNING:</strong> If you plan to use SVG images, you should be aware that you may have visual problems when viewed in ALL versions of Internet Explorer, which does not support the usage of the &quot;foreignObject&quot; tags that are used in these SVG images. These SVGs and the foreignObject tags are supported in pretty much any other modern browser, including Microsoft\'s new Edge browser.</p>';
+    }
+
+    public function advanced_settings_section_text() {
+        echo '<p>These are various settings that generally you would not need to change as a typical user, unless you run into a specific problem or have a very customized server configuration.</p>';
     }
 
     /*
@@ -452,6 +499,21 @@ class drawit {
         echo "</select>";
     }
 
+    public function setting_temp_dir() {
+        //if(!array_key_exists('temp_dir', $this->options) || strtolower($this->options['temp_dir']) == 'wp_default') {
+        $tempdir_base = wp_upload_dir();
+        if(strtolower($this->options['temp_dir']) == 'wp_content') {
+            $content_checked = " checked";
+            $default_checked = "";
+        } else {
+            $default_checked = " checked";
+            $content_checked = "";
+        }
+        echo "<input type='radio' id='tmp_wpdefault' name='" . $this->plugin_slug . "_options[temp_dir]' value='wp_default'" . $default_checked . "><label for='tmp_wpdefault'> Default system temp location, via get_temp_dir():</label><br><code>" . get_temp_dir() . "</code><br>";
+        echo "<input type='radio' id='tmp_wpcontent' name='" . $this->plugin_slug . "_options[temp_dir]' value='wp_content'" . $content_checked . "><label for='tmp_wpcontent'> In wp-content/uploads:</label><br><code>" . $tempdir_base['basedir'] . "/" . $this->plugin_slug . "_temp</code><br>";
+        echo '<p>This selects where to save the temporary files while saving a diagram. This is not the final location, only where it temporarily saves them during processing. Sometimes this setting needs to change if WordPress\'s built-in get_temp_dir() function does not return a valid temp directory location on your system.</p>';
+    }
+
     /*
     public function setting_default_width() {
         echo "<input id='" . $this->plugin_slug . "_default_width' name='" . $this->plugin_slug . "_options[default_width]' size='10' type='text' value='{$this->options['default_width']}' />";
@@ -480,6 +542,7 @@ class drawit {
         // Copy over values
         $opt['default_type'] = $input['default_type'];
         $opt['allow_svg'] = $input['allow_svg'];
+        $opt['temp_dir'] = $input['temp_dir'];
 
         // Remove characters that might be commonly added by mistake.
         /*
@@ -496,6 +559,16 @@ class drawit {
 
         if(strtolower($opt['allow_svg']) != 'yes' && strtolower($opt['allow_svg']) != 'no') {
             $opt['default_type'] = $this->plugin_default_options['allow_svg'];
+        }
+
+
+        // Default values for each field.
+        if(!in_array($opt['temp_dir'], $this->valid_temp_dirs)) {
+            $opt['temp_dir'] = $this->plugin_default_options['temp_dir'];
+        }
+
+        if(strtolower($opt['temp_dir']) != 'wp_default' && strtolower($opt['temp_dir']) != 'wp_content') {
+            $opt['temp_dir'] = $this->plugin_default_options['temp_dir'];
         }
 
         /*
@@ -527,8 +600,6 @@ class drawit {
     <form action="options.php" method="post">
     <?php settings_fields($this->plugin_slug . '_options'); ?>
     <?php do_settings_sections($this->plugin_slug); ?>
-
-    <p class="<?php echo $this->plugin-slug; ?>-warn-svg"><strong>WARNING:</strong> If you plan to use SVG images, you should be aware that you may have visual problems when viewed in ALL versions of Internet Explorer, which does not support the usage of the &quot;foreignObject&quot; tags that are used in these SVG images. These SVGs and the foreignObject tags are supported in pretty much any other modern browser, including Microsoft's new Edge browser.</p>
      
     <input name="Submit" type="submit" id="submit" class="button button-primary" value="<?php esc_attr_e('Save Changes'); ?>" />
     </form></div>
@@ -569,6 +640,6 @@ class drawit {
 
 } // End class
 
-$custom_plugin = new $plugin_slug($plugin_slug, $plugin_label, $plugin_default_options, $valid_types, $valid_units);
+$custom_plugin = new $plugin_slug($plugin_slug, $plugin_label, $plugin_default_options, $valid_types, $valid_units, $valid_temp_dirs);
 
 ?>
