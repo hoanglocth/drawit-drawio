@@ -179,7 +179,7 @@ class drawit {
             // SVG
             if(strpos($img_b64, 'image/svg') !== false) {
                 if(strpos($img_b64, 'base64') < $comma_pos) {
-                    $img_data = urldecode(stripslashes(base64_decode(substr($img_b64, $comma_pos + 1))));
+                    $img_data = base64_decode(substr($img_b64, $comma_pos + 1));
                 } else {
                     $img_data = urldecode(stripslashes(substr($img_b64, $comma_pos + 1)));
                 }   
