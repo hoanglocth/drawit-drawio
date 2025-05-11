@@ -64,7 +64,7 @@ Yes, the plugin automatically sanitizes SVG content by:
 - Removing potentially harmful elements (script, iframe, etc.)
 - Stripping dangerous attributes and JavaScript
 - Validating SVG structure before saving
-This makes SVG diagrams safe to use while preserving their functionality.
+- This makes SVG diagrams safe to use while preserving their functionality.
 
 ## Roadmap
 
