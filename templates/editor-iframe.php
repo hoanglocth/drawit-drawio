@@ -107,6 +107,18 @@ if (get_user_setting('uploader')) {
         ?>
     </select>
     
+    <div style="margin-top: 10px;">
+        <label class="<?php echo DRAWIT_PLUGIN_SLUG; ?>-form-label" for="<?php echo DRAWIT_PLUGIN_SLUG; ?>-as-shortcode">
+            <?php
+            // Check if we're editing from a shortcode
+            $from_shortcode = isset($_REQUEST['from_shortcode']) && $_REQUEST['from_shortcode'] === 'true';
+            ?>
+            <input type="checkbox" id="<?php echo DRAWIT_PLUGIN_SLUG; ?>-as-shortcode" name="<?php echo DRAWIT_PLUGIN_SLUG; ?>-as-shortcode" <?php checked($from_shortcode, true); ?>>
+            Save as shortcode
+        </label>
+        <span class="<?php echo DRAWIT_PLUGIN_SLUG; ?>-help-tip" title="When checked, a shortcode will be inserted instead of the image">?</span>
+    </div>
+    
     <div id="<?php echo DRAWIT_PLUGIN_SLUG; ?>-draft-info" class="<?php echo DRAWIT_PLUGIN_SLUG; ?>-draft-info" style="display:none; margin-top:5px; font-size:12px; color:#666;">
         Changes are automatically saved as drafts
     </div>

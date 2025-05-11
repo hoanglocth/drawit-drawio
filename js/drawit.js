@@ -169,6 +169,10 @@
             var urlParams = new URLSearchParams(window.location.search);
             var img_id = urlParams.has('img_id') ? urlParams.get('img_id') : "";
             
+            // Check if save as shortcode is enabled
+            var asShortcodeElement = document.getElementById(DrawIt.config.plugin.slug + "-as-shortcode");
+            var asShortcode = asShortcodeElement ? (asShortcodeElement.checked ? "true" : "false") : "false";
+            
             // Prepare form data
             var data = {
                 action: "submit-form-" + DrawIt.config.plugin.slug,
@@ -178,7 +182,8 @@
                 xml: DrawIt.utils.getElement('xml').value,
                 img_type: imgType,
                 img_data: imgData,
-                img_id: img_id
+                img_id: img_id,
+                as_shortcode: asShortcode
             };
             
             // Submit to WordPress

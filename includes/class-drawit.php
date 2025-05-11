@@ -2,6 +2,7 @@
 
 require_once ABSPATH . 'wp-admin/includes/file.php';
 require_once ABSPATH . 'wp-admin/includes/media.php';
+require_once DRAWIT_PLUGIN_DIR . 'includes/class-drawit-shortcode.php';
 
 /**
  * Main DrawIt plugin class
@@ -44,6 +45,10 @@ class DrawIt {
         // Initialize AJAX functionality
         $ajax = new DrawIt_Ajax();
         $ajax->init();
+
+        // Initialize shortcode functionality
+        $drawit_shortcode = new DrawIt_Shortcode();
+        $drawit_shortcode->init();
         
         // Register frontend scripts and styles
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));

@@ -92,6 +92,42 @@
             return imageInfo;
         },
         
+        parseShortcode: function(content, slug) {
+            if (!content || typeof content !== 'string') {
+                return null;
+            }
+            
+            // Regex to match shortcode with attributes
+            var shortcodeRegex = new RegExp('\\[' + slug + '\\s+([^\\]]+)\\]', 'i');
+            var match = content.match(shortcodeRegex);
+            
+            if (!match) {
+                return null;
+            }
+            
+            var attrsString = match[1];
+            var attrRegex = /(\w+)="([^"]+)"/g;
+            var attrs = {};
+            var attrMatch;
+            
+            // Extract all attributes from the shortcode
+            while ((attrMatch = attrRegex.exec(attrsString)) !== null) {
+                attrs[attrMatch[1]] = attrMatch[2];
+            }
+            
+            // Check if ID exists
+            if (!attrs.id) {
+                return null;
+            }
+            
+            // Return information compatible with the editor URL generator
+            return {
+                id: "&img_id=" + attrs.id,
+                title: attrs.title ? "&title=" + encodeURIComponent(attrs.title) : '',
+                from_shortcode: true
+            };
+        },
+        
         // Get current post ID from URL
         getPostId: function() {
             var postIdMatch = new RegExp("[?&]post=([^&#]*)").exec(window.location.href);
@@ -121,6 +157,7 @@
                    "&post_id=" + postId + 
                    (imageInfo.title || "") + 
                    (imageInfo.id || "") + 
+                   (imageInfo.from_shortcode ? "&from_shortcode=true" : "") + 
                    "&TB_iframe=true";
         },
         

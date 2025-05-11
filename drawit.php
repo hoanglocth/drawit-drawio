@@ -2,13 +2,13 @@
 
 /**
  * @package DrawIt - Draw.io Intergation
- * @version 1.0
+ * @version 1.0.1
  */
 /*
 Plugin Name:    DrawIt - Draw.io Intergation
 Plugin URI:     Loc Hoang
 Description:    Draw and edit flow charts, diagrams, images and more while editing a post.
-Version:        1.0
+Version:        1.0.1
 Author:         Loc Hoang
 Author URI:     Loc Hoang
 License:        GPL3 or later
@@ -35,7 +35,7 @@ License URI:    https://www.gnu.org/licenses/gpl-3.0.html
 defined('ABSPATH') or die('No script kiddies please!');
 
 // Define plugin constants
-define('DRAWIT_VERSION', '1.0');
+define('DRAWIT_VERSION', '1.0.1');
 define('DRAWIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DRAWIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('DRAWIT_PLUGIN_SLUG', 'drawit');
