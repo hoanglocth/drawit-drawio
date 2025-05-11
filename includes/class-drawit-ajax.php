@@ -103,7 +103,8 @@ class DrawIt_Ajax {
                     $result['data'] = base64_decode(substr($img_b64, $comma_pos + 1));
                 } else {
                     $result['data'] = urldecode(stripslashes(substr($img_b64, $comma_pos + 1)));
-                }   
+                }
+                $result['data'] = $this->sanitize_svg($result['data']); // Sanitize SVG
                 $result['type'] = 'svg';
             // PNG
             } else {
@@ -112,6 +113,41 @@ class DrawIt_Ajax {
         }
         
         return $result;
+    }
+
+    /**
+     * Sanitize SVG content to remove potentially harmful elements and attributes
+     * 
+     * @param string $svg_content The raw SVG content
+     * @return string Sanitized SVG content
+     */
+    private function sanitize_svg($svg_content) {
+        if (empty($svg_content)) {
+            return $svg_content;
+        }
+
+        // Load SVG into DOMDocument
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadXML($svg_content, LIBXML_NOENT | LIBXML_DTDLOAD | LIBXML_NOWARNING | LIBXML_NOERROR);
+        libxml_clear_errors();
+
+        // Remove dangerous elements
+        $dangerous_tags = ['script', 'iframe', 'object', 'embed', 'use'];
+        foreach ($dangerous_tags as $tag) {
+            $elements = $dom->getElementsByTagName($tag);
+            while ($elements->length > 0) {
+                $elements->item(0)->parentNode->removeChild($elements->item(0));
+            }
+        }
+
+        // Remove dangerous attributes
+        $xpath = new DOMXPath($dom);
+        foreach ($xpath->query('//@*[starts-with(name(), "on") or contains(translate(., "JAVASCRIPT:", "javascript:"), "javascript:") or contains(translate(., "DATA:", "data:"), "data:")]') as $attr) {
+            $attr->parentNode->removeAttribute($attr->nodeName);
+        }
+
+        return $dom->saveXML($dom->documentElement);
     }
     
     /**
@@ -407,6 +443,9 @@ class DrawIt_Ajax {
     private function generate_success_response($attach_id, $title, $add_cache_busting = false) {
         $resp = array('success' => true, 'att_id' => $attach_id);
         
+        // Check if we should generate a shortcode instead of HTML
+        $generate_shortcode = isset($_POST['as_shortcode']) && ($_POST['as_shortcode'] === 'true' || $_POST['as_shortcode'] === true);
+        
         // Get attachment URL
         $file_url = wp_get_attachment_url($attach_id);
         
@@ -419,21 +458,26 @@ class DrawIt_Ajax {
             clean_attachment_cache($attach_id);
         }
         
-        // Generate HTML
-        $img_html = wp_get_attachment_image($attach_id, 'full', false, array(
-            'class' => 'aligncenter wp-image-' . $attach_id,
-            'title' => htmlentities($title)
-        ));
-        
-        if ($img_html != '') {
-            // If cache busting is enabled, replace the original URL with the cache-busted URL
-            if ($add_cache_busting) {
-                $img_html = str_replace(wp_get_attachment_url($attach_id), $file_url, $img_html);
-            }
-            $resp['html'] = $img_html;
+        if ($generate_shortcode) {
+            // Generate shortcode
+            $resp['html'] = '[' . DRAWIT_PLUGIN_SLUG . ' id="' . $attach_id . '" title="' . esc_attr($title) . '"]';
         } else {
-            $resp['html'] = '<img class="' . DRAWIT_PLUGIN_SLUG . '-img wp-image-' . $attach_id . 
-                        '" src="' . $file_url . '" title="' . htmlentities($title) . '">';
+            // Generate HTML
+            $img_html = wp_get_attachment_image($attach_id, 'full', false, array(
+                'class' => 'aligncenter wp-image-' . $attach_id,
+                'title' => htmlentities($title)
+            ));
+            
+            if ($img_html != '') {
+                // If cache busting is enabled, replace the original URL with the cache-busted URL
+                if ($add_cache_busting) {
+                    $img_html = str_replace(wp_get_attachment_url($attach_id), $file_url, $img_html);
+                }
+                $resp['html'] = $img_html;
+            } else {
+                $resp['html'] = '<img class="' . DRAWIT_PLUGIN_SLUG . '-img wp-image-' . $attach_id . 
+                            '" src="' . $file_url . '" title="' . htmlentities($title) . '">';
+            }
         }
         
         return $resp;

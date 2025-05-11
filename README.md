@@ -15,6 +15,8 @@ DrawIt is a WordPress plugin that interfaces with the draw.io website to easily 
 - Direct integration with draw.io's powerful interface
 - Automatic source code saving for future editing
 - Export as PNG or SVG
+- Optional shortcode output for more flexibility
+- Enhanced SVG security with sanitization
 
 ## Installation
 
@@ -45,6 +47,25 @@ The source code for the diagram is saved with the image in your WordPress instal
 
 For now, you'll have to insert it into a post to be able to edit it. We'll work on improving this in future releases.
 
+### How do I use shortcodes for diagrams?
+
+When saving a diagram, check the "Save as shortcode" option. This will insert a shortcode like `[drawit id="123" title="My Diagram"]` instead of the image. The shortcode supports these attributes:
+
+- `id` - Required. The attachment ID of the diagram
+- `title` - Optional. Title for the diagram
+- `class` - Optional. Additional CSS classes
+- `align` - Optional. Alignment (left/center/right)
+- `inline_svg` - Optional. Whether to render SVG diagrams inline (default: true)
+
+### Are SVG diagrams secure?
+
+Yes, the plugin automatically sanitizes SVG content by:
+
+- Removing potentially harmful elements (script, iframe, etc.)
+- Stripping dangerous attributes and JavaScript
+- Validating SVG structure before saving
+This makes SVG diagrams safe to use while preserving their functionality.
+
 ## Roadmap
 
 - Add option for saving draw.io XML source in the PNG or SVG directly, instead of only saving the source XML to the WP database
@@ -62,6 +83,14 @@ For now, you'll have to insert it into a post to be able to edit it. We'll work 
 This plugin uses the [draw.io website](https://www.draw.io/), but is not affiliated with draw.io.
 
 ## Changelog
+
+### 1.0.1
+
+- Added shortcode support for more flexible diagram insertion
+- Added SVG sanitization for enhanced security
+- Added support for inline SVG rendering
+- Fixed issues with draft saving and recovery
+- Improved editor stability and error handling
 
 ### 1.0
 
