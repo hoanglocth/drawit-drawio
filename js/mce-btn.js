@@ -1,78 +1,56 @@
-(function() {
-    plugin_slug = 'drawit';
-    plugin_name = 'DrawIt';
+(function($) {
+    'use strict';
 
-    // To attach new diagram to this post, need to also indicate post ID.
-    post_id_get = new RegExp('[\?&amp;]post=([^&amp;#]*)').exec(window.location.href);
-    post_id = (post_id_get !== null && post_id_get.length > 1) ? post_id_get[1] : 0;
+    // Use the common DrawIt namespace
+    window.DrawIt = window.DrawIt || {};
 
-    tinymce.PluginManager.add(plugin_slug + '_mce_button', function(editor, url) {
-        editor.on('init', function() {
-            var cssURL = url + '/../css/drawit-mce.css';
-            if(document.createStyleSheet){
-                document.createStyleSheet(cssURL);
-            } else {
-                cssLink = editor.dom.create('link', {
-                            rel: 'stylesheet',
-                            href: cssURL
-                          });
-                document.getElementsByTagName('head')[0].
-                          appendChild(cssLink);
-            }
-        });
-
-        editor.addButton(plugin_slug + '_mce_button', {
-            tooltip: plugin_name + ' Diagram',
-            icon: plugin_slug,
-            onclick: function() {
-                diag_title = "";
-                img_id = "";
-
-                selected_code = tinymce.activeEditor.selection.getContent();
-
-                // If this errors out, then just leave the title and id as default values.
-                try {
-                    // Add <span></span> around this copy of selection for ease of jQuery parsing
-                    // (eases matching of both <img> at top level or at nested level of selection).
-                    j_code = jQuery('<span>' + selected_code + '</span>').find('img').first();
-
-                    // If editing an existing diagram, then get the title of it (if provided).
-                    diag_title = j_code.attr('title');
-                    if (typeof diag_title === typeof undefined || diag_title === false) {
-                        diag_title = "";
+    // TinyMCE (visual editor) button integration
+    DrawIt.TinyMCE = {
+        // Initialize button in the visual editor
+        init: function() {
+            var slug = DrawIt.utils.config.plugin.slug;
+            var name = DrawIt.utils.config.plugin.name;
+            
+            // Register the TinyMCE plugin
+            tinymce.PluginManager.add(slug + "_mce_button", function(editor, url) {
+                // Add CSS for the button
+                editor.on("init", function() {
+                    var cssURL = url + "/../css/" + slug + "-mce.css";
+                    
+                    if (document.createStyleSheet) {
+                        document.createStyleSheet(cssURL);
                     } else {
-                        diag_title = '&title=' + diag_title;
+                        var cssLink = editor.dom.create("link", {
+                            rel: "stylesheet",
+                            href: cssURL
+                        });
+                        document.getElementsByTagName("head")[0].appendChild(cssLink);
                     }
+                });
 
-                    // If there are multiple classes defined, then find the one
-                    // we want that has the attachment id#.
-                    img_class = j_code.attr('class');
-                    if (typeof img_class !== typeof undefined && img_class !== false) {
-                        img_class_split = img_class.split(' ');
-                        for(i = 0; i < img_class_split.length; i++) {
-                            elem = img_class_split[i];
-                            if(elem.indexOf('wp-image-') === 0) {
-                                img_class_split = elem.split('-');
-                                img_id = '&img_id=' + img_class_split[2];
-                            }
-                        }
+                // Add the button to TinyMCE
+                editor.addButton(slug + "_mce_button", {
+                    tooltip: name + " Diagram",
+                    icon: slug,
+                    onclick: function() {
+                        var selectedCode = tinymce.activeEditor.selection.getContent();
+                        var imageInfo = DrawIt.utils.parseImageInfo(selectedCode);
+                        var editorUrl = DrawIt.utils.getEditorUrl(imageInfo);
+
+                        // Fix base URL by removing '/js' suffix
+                        var baseUrl = url + "/../"
+
+                        tb_show("Draw a diagram", editorUrl, false);
+                        DrawIt.utils.styleThickbox(baseUrl);
                     }
-
-                } catch(err) {
-                    diag_title = "";
-                    img_id = "";
-                }
-                tb_show('Draw a diagram', 'media-upload.php?referer=' + plugin_slug + '&type=' + plugin_slug + '&post_id=' + post_id + diag_title + img_id + '&TB_iframe=true', false);
-
-                jQuery('#TB_window').css({
-                    'min-width': '90%',
-                    'left': 'calc(-1 * (' + jQuery('#TB_window').css('margin-left') + ') + 5%)',
-                    'background': 'url("' + url + '/../img/wpspin-2x.gif") no-repeat center center #fff'
                 });
-                jQuery('#TB_window > iframe').css({
-                    'min-width': '100%'
-                });
-            }
-        });
+            });
+        }
+    };
+
+    // Initialize when document is ready
+    $(document).ready(function() {
+        DrawIt.TinyMCE.init();
     });
-})();
+
+})(jQuery);

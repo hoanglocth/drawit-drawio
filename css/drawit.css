@@ -1,87 +1,141 @@
 .drawit-media-form {
-    margin: 0;
-    padding: 0;
-    width: 0;
-    height: 0;
+	margin: 0;
+	padding: 0;
+	width: 0;
+	height: 0;
 }
 
 .drawit-form-title-block {
-    margin-left: 0.5em;
+	margin-bottom: 10px;
+	padding: 10px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
 }
 
 .drawit-form-label {
-    font-size: large;
+	font-weight: bold;
+	margin-right: 5px;
 }
 
 .drawit-form-text-input {
-    font-size: large;
-    margin: 3px;
-    padding: 2px;
-    line-height: 1em;
+	width: 300px;
+	margin-right: 15px;
+	font-size: large;
+	margin: 3px;
+	padding: 2px;
+	line-height: 1em;
 }
 
 .drawit-editor-iframe {
-    width: 100%;
-    height: 94%;
-    height: calc(100% - 45px);
+	width: 100%;
+	height: 600px;
+	border: 1px solid #ddd;
 }
 
 .drawit-editor-mask {
-    display:        none;
-    position:       absolute;
-    top:            0;
-    left:           0;
-    z-index:        100;
-    overflow:       hidden;
-    width:          100%;
-    height:         100%;
-    background:     rgba(0,0,0,0.4);
-    vertical-align: middle;
-    text-align:     center;
-    line-height:    100%;
-    line-height:    100vh;
-    font-size:      x-large;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .drawit-editor-saving {
-    display: inline;
-    background-color: #eee;
-    background-image: url('../img/wpspin-2x.gif');
-    background-repeat: no-repeat;
-    background-position: 15px center;
-    padding: 20px 20px 20px 60px;
-    border-radius: 3px;
-    color: #000;
-    -webkit-box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.4);
-    -moz-box-shadow:    2px 2px 3px 0px rgba(0,0,0,0.4);
-    -o-box-shadow:      2px 2px 3px 0px rgba(0,0,0,0.4);
-    box-shadow:         2px 2px 3px 0px rgba(0,0,0,0.4);
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	position: relative;
+	font-weight: bold;
 }
 
 .drawit-editor-saving-x {
-    cursor: pointer;
-    display: inline;
-    position: relative;
-    top: -1em;
-    top: calc((-20px - 1em) / 2);
-    margin-right: -0.5em;
-    width: 1em;
-    text-align: left;
-    color: #ccc;
+	position: absolute;
+	top: 5px;
+	right: 10px;
+	cursor: pointer;
+	font-weight: bold;
 }
 
 .drawit-editor-saving-x:hover {
-    color: #aaa;
+	color: #aaa;
 }
 
-iframe.drawit-iframe {
-    position: absolute;
-    top: -9999em;
-    left: -9999em;
-    visibility: hidden;
+.drawit-warn-svg {
+	color: #d94f4f;
+	padding: 10px;
+	border: 1px solid #f5c6cb;
+	background-color: #f8d7da;
+	border-radius: 4px;
+	margin: 10px 0;
 }
 
-iframe.drawit-iframe-displayed {
-    position: static;
-    visibility: visible;
+.drawit-reset-button,
+.drawit-recover-button,
+.drawit-clear-button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.drawit-reset-button {
+    background-color: #f1f1f1;
+}
+
+.drawit-recover-button {
+    background-color: #fff4e5;
+    border-color: #f0ad4e;
+}
+
+.drawit-clear-button {
+    background-color: #f9f9f9;
+    border-color: #ddd;
+}
+
+.drawit-reset-button:hover {
+    background-color: #e0e0e0;
+}
+
+.drawit-recover-button:hover {
+    background-color: #ffeacc;
+}
+
+.drawit-clear-button:hover {
+    background-color: #f1f1f1;
+}
+
+.drawit-editor-status {
+    background-color: #f8f9fa;
+    border-left: 3px solid #17a2b8;
+    padding: 8px 10px;
+    margin: 10px 0;
+    border-radius: 2px;
+    font-weight: normal;
+}
+
+.drawit-reset-container {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.drawit-draft-info {
+    background-color: #f8f9fa;
+    border-left: 3px solid #17a2b8;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-top: 10px;
+    border-radius: 2px;
 }

@@ -1,3 +1,6 @@
 .mce-i-drawit {
-    background: url("../img/drawit.png") no-repeat center center;
+	background: url("../img/drawit.png") no-repeat center center;
+}
+#TB_iframeContent {
+	min-width: 100%;
 }
